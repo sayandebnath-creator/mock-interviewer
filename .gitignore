@@ -1,0 +1,82 @@
+# Python
+
+**pycache**/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+
+venv/
+.env/
+.env.*
+
+# MacOS
+
+.DS_Store
+
+# Logs
+
+*.log
+
+# Temporary files
+
+temp.txt
+*.tmp
+
+# Audio files (generated during runtime)
+
+input.wav
+output.wav
+*.wav
+
+# Whisper / model cache
+
+.cache/
+~/.cache/
+
+# Ollama (local models - VERY LARGE)
+
+# Do NOT commit models
+
+ollama/
+
+# Piper (if you ever reinstall it later)
+
+piper/
+*.onnx
+*.json
+
+# IDEs
+
+.vscode/
+.idea/
+
+# Jupyter
+
+.ipynb_checkpoints/
+
+# Environment variables / secrets
+
+.env
+
+# Build / dist
+
+build/
+dist/
+*.egg-info/
+
+# OS files
+
+Thumbs.db
+
+# Testing
+
+.coverage
+htmlcov/
+
+# Misc
+
+*.bak
+*.swp
