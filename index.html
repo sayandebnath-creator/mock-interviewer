@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Interviewer</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: #0f172a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+}
+
+/* Orb */
+.orb {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #38bdf8, #0ea5e9);
+    box-shadow: 0 0 40px #38bdf8;
+    transition: all 0.3s ease;
+}
+
+/* Speaking animation */
+.speaking {
+    animation: bounce 0.6s infinite;
+}
+
+/* Listening state */
+.listening {
+    background: radial-gradient(circle, #22c55e, #16a34a);
+    box-shadow: 0 0 40px #22c55e;
+}
+
+/* Idle pulse */
+.idle {
+    animation: pulse 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+.controls {
+    position: absolute;
+    bottom: 40px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    background: #1e293b;
+    color: white;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="orb" class="orb idle"></div>
+
+<div class="controls">
+    <button onclick="setState('listening')">Listening</button>
+    <button onclick="setState('speaking')">Speaking</button>
+    <button onclick="setState('idle')">Idle</button>
+</div>
+
+<script>
+const orb = document.getElementById("orb");
+
+function setState(state) {
+    orb.classList.remove("idle", "listening", "speaking");
+
+    if (state === "listening") {
+        orb.classList.add("listening");
+    } else if (state === "speaking") {
+        orb.classList.add("speaking");
+    } else {
+        orb.classList.add("idle");
+    }
+}
+</script>
+
+</body>
+</html>
