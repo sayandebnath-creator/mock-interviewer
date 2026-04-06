@@ -3,108 +3,274 @@
 <head>
 <meta charset="UTF-8">
 <title>Mock Interviewer</title>
-
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    margin: 0;
-    height: 100vh;
-    background: #0f172a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: sans-serif;
+  min-height: 100vh;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  padding: 40px 20px;
 }
 
-/* Orb */
+/* ---- ORB ---- */
+.orb-wrap {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .orb {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #38bdf8, #0ea5e9);
-    box-shadow: 0 0 40px #38bdf8;
-    transition: all 0.3s ease;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #93c5fd, #2563eb);
+  transition: background 0.4s ease;
+  position: relative;
+  z-index: 2;
+  animation: orbIdle 2.6s ease-in-out infinite;
 }
 
-/* Speaking animation */
-.speaking {
-    animation: bounce 0.6s infinite;
+.orb-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(56, 189, 248, 0.18);
+  animation: ringPulse 2.4s ease-in-out infinite;
+}
+.orb-ring:nth-child(1) { width: 124px; height: 124px; animation-delay: 0s; }
+.orb-ring:nth-child(2) { width: 144px; height: 144px; animation-delay: 0.6s; }
+.orb-ring:nth-child(3) { width: 164px; height: 164px; animation-delay: 1.2s; }
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1); }
+}
+@keyframes orbIdle {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+@keyframes orbSpeaking {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
-/* Listening state */
-.listening {
-    background: radial-gradient(circle, #22c55e, #16a34a);
-    box-shadow: 0 0 40px #22c55e;
+/* STATE classes applied to <body> */
+body.speaking .orb {
+  background: radial-gradient(circle at 35% 35%, #93c5fd, #1d4ed8);
+  animation: orbSpeaking 0.5s ease-in-out infinite;
+}
+body.listening .orb {
+  background: radial-gradient(circle at 35% 35%, #6ee7b7, #059669);
+  animation: none;
+}
+body.listening .orb-ring { border-color: rgba(34, 197, 94, 0.22); }
+
+/* ---- WAVEFORM ---- */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 52px;
+  margin: 24px 0 8px;
 }
 
-/* Idle pulse */
-.idle {
-    animation: pulse 2s infinite;
+.bar {
+  width: 4px;
+  border-radius: 2px;
+  background: #38bdf8;
+  height: 5px;
+  opacity: 0.3;
+  transform-origin: center;
+  transition: background 0.3s ease, opacity 0.3s ease;
 }
 
-@keyframes bounce {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
+body.speaking .bar {
+  background: #60a5fa;
+  opacity: 1;
+  animation: waveSpeaking var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+body.listening .bar {
+  background: #34d399;
+  opacity: 1;
+  animation: waveListening var(--dur) ease-in-out infinite;
+  animation-delay: var(--delay);
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.8; }
-    50% { transform: scale(1.1); opacity: 1; }
+@keyframes waveSpeaking {
+  0%, 100% { height: 5px; }
+  50% { height: var(--max-h); }
+}
+@keyframes waveListening {
+  0%, 100% { height: 4px; }
+  50% { height: var(--listen-h); }
 }
 
-.controls {
-    position: absolute;
-    bottom: 40px;
+/* ---- STATUS BADGE ---- */
+.status-badge {
+  font-size: 12px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+  margin-bottom: 28px;
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.35);
+  transition: all 0.3s ease;
 }
+body.speaking .status-badge { background: rgba(59,130,246,0.15); color: #93c5fd; }
+body.listening .status-badge { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+
+/* ---- TRANSCRIPT ---- */
+.transcript-box {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255,255,255,0.04);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 16px 20px;
+  min-height: 90px;
+  margin-bottom: 32px;
+}
+.transcript-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.28);
+  margin-bottom: 8px;
+}
+.transcript-text {
+  font-size: 15px;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.6;
+  min-height: 44px;
+  word-break: break-word;
+}
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 14px;
+  background: #38bdf8;
+  border-radius: 1px;
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+body.idle .cursor { display: none; }
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* ---- CONTROLS ---- */
+.controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 
 button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
-    background: #1e293b;
-    color: white;
-    cursor: pointer;
+  padding: 9px 20px;
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s, color 0.2s;
 }
+button:hover { background: rgba(255,255,255,0.13); color: white; }
 </style>
 </head>
+<body class="idle">
 
-<body>
+<div class="orb-wrap">
+  <div class="orb-ring"></div>
+  <div class="orb-ring"></div>
+  <div class="orb-ring"></div>
+  <div class="orb" id="orb"></div>
+</div>
 
-<div id="orb" class="orb idle"></div>
+<div class="waveform" id="waveform"></div>
+
+<div class="status-badge" id="statusBadge">Idle</div>
+
+<div class="transcript-box">
+  <div class="transcript-label" id="transcriptLabel">Transcript</div>
+  <div class="transcript-text">
+    <span id="transcriptContent"></span>
+    <span class="cursor"></span>
+  </div>
+</div>
 
 <div class="controls">
-    <button onclick="setState('listening')">Listening</button>
-    <button onclick="setState('speaking')">Speaking</button>
-    <button onclick="setState('idle')">Idle</button>
+  <button onclick="startInterview()">Start Interview</button>
+  <button onclick="startMic()">Speak</button>
+  <button onclick="finishInterview()">Finish</button>
 </div>
 
 <script>
-const orb = document.getElementById("orb");
+/* ---- WAVEFORM SETUP ---- */
+const BAR_COUNT = 28;
+const waveformEl = document.getElementById("waveform");
 
-/* ---------- STATE CONTROL ---------- */
+const durations =   [0.4,0.5,0.35,0.6,0.45,0.55,0.4,0.5,0.38,0.6,0.42,0.52,0.47,0.35,0.58,0.43,0.5,0.4,0.6,0.44,0.37,0.53,0.48,0.41,0.56,0.46,0.38,0.5];
+const maxHeights =  [10,22,16,32,26,18,38,14,28,20,36,12,30,24,40,16,22,34,18,28,10,36,20,14,30,26,40,18];
+const listenHeights = maxHeights.map(h => Math.round(h * 0.6));
+
+for (let i = 0; i < BAR_COUNT; i++) {
+  const bar = document.createElement("div");
+  bar.className = "bar";
+  bar.style.setProperty("--dur",      durations[i] + "s");
+  bar.style.setProperty("--delay",    (i * 0.04 - 0.56).toFixed(2) + "s");
+  bar.style.setProperty("--max-h",    maxHeights[i] + "px");
+  bar.style.setProperty("--listen-h", listenHeights[i] + "px");
+  waveformEl.appendChild(bar);
+}
+
+/* ---- STATE CONTROL ---- */
+const statusBadge    = document.getElementById("statusBadge");
+const transcriptLabel = document.getElementById("transcriptLabel");
+const transcriptContent = document.getElementById("transcriptContent");
+
+const stateLabels = { idle: "Idle", speaking: "Speaking…", listening: "Listening…" };
+
 function setState(state) {
-    orb.classList.remove("idle", "listening", "speaking");
-    orb.classList.add(state);
+  document.body.className = state;
+  statusBadge.textContent = stateLabels[state] || state;
+
+  if (state === "listening") transcriptLabel.textContent = "You said";
+  else if (state === "speaking") transcriptLabel.textContent = "Interviewer";
+  else transcriptLabel.textContent = "Transcript";
 }
 
-/* ---------- TEXT TO SPEECH (browser) ---------- */
+/* ---- STREAMING TRANSCRIPT ---- */
+let streamTimer = null;
+
+function streamText(text) {
+  if (streamTimer) clearInterval(streamTimer);
+  transcriptContent.textContent = "";
+  const words = text.split(" ");
+  let i = 0;
+  streamTimer = setInterval(() => {
+    if (i >= words.length) { clearInterval(streamTimer); return; }
+    transcriptContent.textContent += (i === 0 ? "" : " ") + words[i++];
+  }, 55);
+}
+
+/* ---- TEXT TO SPEECH ---- */
 function speak(text) {
-    return new Promise((resolve) => {
-        const utterance = new SpeechSynthesisUtterance(text);
-
-        utterance.onstart = () => setState("speaking");
-        utterance.onend = () => {
-            setState("idle");
-            resolve();
-        };
-
-        speechSynthesis.speak(utterance);
-    });
+  return new Promise((resolve) => {
+    streamText(text);                         // ← stream transcript while speaking
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.onstart = () => setState("speaking");
+    utterance.onend   = () => { setState("idle"); resolve(); };
+    speechSynthesis.speak(utterance);
+  });
 }
 
-/* ---------- SPEECH RECOGNITION ---------- */
+/* ---- SPEECH RECOGNITION ---- */
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-
 recognition.lang = "en-US";
 recognition.interimResults = false;
 recognition.continuous = false;
@@ -112,69 +278,55 @@ recognition.continuous = false;
 recognition.onstart = () => setState("listening");
 
 recognition.onresult = (event) => {
-    const text = event.results[0][0].transcript;
-    console.log("You:", text);
-    sendResponse(text);
+  const text = event.results[0][0].transcript;
+  transcriptContent.textContent = text;       // ← show what user said
+  console.log("You:", text);
+  sendResponse(text);
 };
 
 recognition.onerror = (err) => {
-    console.error("Mic error:", err);
-    setState("idle");
+  console.error("Mic error:", err);
+  setState("idle");
 };
 
-function startMic() {
-    recognition.start();
-}
+function startMic() { recognition.start(); }
 
-/* ---------- API CALLS ---------- */
-
+/* ---- API CALLS (unchanged) ---- */
 async function startInterview() {
-    try {
-        const res = await fetch("http://127.0.0.1:8000/start");
-        const data = await res.json();
-
-        await speak(data.reply);
-
-    } catch (err) {
-        console.error(err);
-        alert("Backend not reachable");
-    }
+  try {
+    const res  = await fetch("http://127.0.0.1:8000/start");
+    const data = await res.json();
+    await speak(data.reply);
+  } catch (err) {
+    console.error(err);
+    alert("Backend not reachable");
+  }
 }
 
 async function sendResponse(text) {
-    try {
-        setState("listening");
-
-        const res = await fetch("http://127.0.0.1:8000/respond", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ text })
-        });
-
-        const data = await res.json();
-
-        await speak(data.reply);
-
-    } catch (err) {
-        console.error(err);
-        setState("idle");
-    }
+  try {
+    const res  = await fetch("http://127.0.0.1:8000/respond", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text })
+    });
+    const data = await res.json();
+    await speak(data.reply);
+  } catch (err) {
+    console.error(err);
+    setState("idle");
+  }
 }
 
 async function finishInterview() {
-    try {
-        const res = await fetch("http://127.0.0.1:8000/evaluate");
-        const data = await res.json();
-
-        await speak(data.reply);
-
-    } catch (err) {
-        console.error(err);
-    }
+  try {
+    const res  = await fetch("http://127.0.0.1:8000/evaluate");
+    const data = await res.json();
+    await speak(data.reply);
+  } catch (err) {
+    console.error(err);
+  }
 }
 </script>
 
 </body>
-</html>
