@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from llm.interviewer import Interviewer
 from core.question_manager import QuestionManager
-from cors.middleware import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
