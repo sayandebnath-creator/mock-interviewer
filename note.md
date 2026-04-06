@@ -91,3 +91,15 @@ http://localhost:5500/index.html
 Frontend (5500)
    ↓ fetch()
 Backend (8000)
+
+# Added the commits to new branch (web app)
+git checkout -b web-app
+git checkout main
+git reset --hard <commit-hash>
+
+## Before:
+main: A → B → C → D → E → F
+
+## After:
+main: A → B → C
+web-app: A → B → C → D → E → F
