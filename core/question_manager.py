@@ -7,7 +7,7 @@ class QuestionManager:
 
     def get_question(self, difficulty=None):
         if difficulty:
-            filtered = [q for q in self.questions if q["difficulty"] == difficulty]
+            filtered = [q for q in self.questions if q["difficulty"] == difficulty] # Filter questions by difficulty
         else:
             filtered = self.questions
 

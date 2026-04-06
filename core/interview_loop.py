@@ -15,14 +15,14 @@ def run_interview():
 
     # STEP 2: Ask question (CONTROLLED)
     start_prompt = f"""
-Ask this question to the candidate:
+    Ask this question to the candidate:
 
-{question_data['question']}
+    {question_data['question']}
 
-Rules:
-- Do NOT give solution
-- Act like real interviewer
-"""
+    Rules:
+    - Do NOT give solution
+    - Act like real interviewer
+    """
 
     reply = interviewer.ask(start_prompt)
     print("Interviewer:", reply)
@@ -44,16 +44,16 @@ Rules:
 
         # STEP 4: CONTROLLED RESPONSE (IMPORTANT)
         context_prompt = f"""
-Question: {question_data['question']}
-Expected Approach: {question_data['expected_approach']}
+        Question: {question_data['question']}
+        Expected Approach: {question_data['expected_approach']}
 
-Candidate answer: {user_input}
+        Candidate answer: {user_input}
 
-Act as interviewer:
-- If correct → ask deeper questions
-- If wrong → give hint ONLY
-- DO NOT give full solution
-"""
+        Act as interviewer:
+        - If correct → ask deeper questions
+        - If wrong → give hint ONLY
+        - DO NOT give full solution
+        """
 
         reply = interviewer.ask(context_prompt)
         print("Interviewer:", reply)

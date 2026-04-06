@@ -8,6 +8,6 @@ def speech_to_text():
     record_audio(AUDIO_FILE)
 
     segments, _ = model.transcribe(AUDIO_FILE)
-    text = " ".join([seg.text for seg in segments])
+    text = " ".join([seg.text for seg in segments]) # Remove leading/trailing whitespace
 
     return text.strip()

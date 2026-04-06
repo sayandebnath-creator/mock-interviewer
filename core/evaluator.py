@@ -1,14 +1,14 @@
 def evaluate(interviewer, question_data):
     prompt = f"""
-Question: {question_data['question']}
-Expected Approach: {question_data['expected_approach']}
+    Question: {question_data['question']}
+    Expected Approach: {question_data['expected_approach']}
 
-Evaluate candidate:
+    Evaluate candidate:
 
-- Correctness (0–10)
-- Approach (0–10)
-- Communication (0–10)
-- Verdict (Hire / No Hire)
-"""
+    - Correctness (0–10)
+    - Approach (0–10)
+    - Communication (0–10)
+    - Verdict (Hire / No Hire)
+    """
 
-    return interviewer.ask(prompt)
+    return interviewer.ask(prompt) # Evaluate candidate based on the question and expected approach
