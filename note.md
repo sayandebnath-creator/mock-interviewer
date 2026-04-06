@@ -82,3 +82,12 @@ But fine for:
 ✔ UI + backend separation
 ✔ Voice interaction
 ✔ Real interview loop
+
+# TO RUN FRONTEND
+python3 -m http.server 5500
+http://localhost:5500/index.html
+
+# How both connect
+Frontend (5500)
+   ↓ fetch()
+Backend (8000)
