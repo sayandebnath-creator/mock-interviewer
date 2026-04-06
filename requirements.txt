@@ -1,5 +1,10 @@
+# Requirements for the Ollama-based voice assistant
 ollama
 faster-whisper 
 sounddevice 
 scipy
 pyttsx3
+
+# For the web interface
+fastapi 
+uvicorn

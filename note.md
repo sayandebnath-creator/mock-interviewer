@@ -35,3 +35,18 @@ SciPy
 
 pyttsx3
 → text → voice
+
+# DIFFERENCE BETWEEN PIPER AND PYTTSX3
+
+| Aspect         | Before (Piper)           | Now (pyttsx3) |
+| -------------- | ------------------------ | ------------- |
+| Setup          | Heavy                    | Minimal       |
+| Dependencies   | External binary + models | Pure Python   |
+| OS issues      | Yes                      | No            |
+| Audio playback | Manual (`afplay`)        | Automatic     |
+| Stability      | Fragile                  | Stable        |
+| Voice quality  | Good                     | Basic         |
+| Dev speed      | Slow                     | Fast          |
+
+# State driven Ui
+idle → listening → speaking
