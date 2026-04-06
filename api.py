@@ -15,6 +15,9 @@ current_question = qm.get_question("medium")
 class UserInput(BaseModel):
     text: str
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Mock Interviewer API."}
 
 @app.get("/start")
 def start_interview():
