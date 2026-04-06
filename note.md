@@ -103,3 +103,6 @@ main: A → B → C → D → E → F
 ## After:
 main: A → B → C
 web-app: A → B → C → D → E → F
+
+# To take commits from another branch
+git cherry-pick <commit-hash>
