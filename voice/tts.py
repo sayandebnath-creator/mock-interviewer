@@ -7,5 +7,6 @@ engine.setProperty('rate', 170)   # speed
 engine.setProperty('volume', 1.0)
 
 def speak(text):
-    engine.say(text)
+    clean = clean_text_for_tts(text)
+    engine.say(clean)
     engine.runAndWait()
