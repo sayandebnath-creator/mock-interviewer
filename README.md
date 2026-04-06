@@ -1,7 +1,7 @@
 # AI Mock Interviewer (Google-Style DSA)
 
 An AI-powered technical interviewer that simulates real-world coding interviews (Google/MNC level) using open-source LLMs, speech recognition, and voice feedback.
-![Demo GIF of Mock Interviewer](videos/demo.gif)
+![Demo GIF of Mock Interviewer](videos/demo1.gif)
 
 ---
 
