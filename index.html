@@ -81,15 +81,97 @@ button {
 <script>
 const orb = document.getElementById("orb");
 
+/* ---------- STATE CONTROL ---------- */
 function setState(state) {
     orb.classList.remove("idle", "listening", "speaking");
+    orb.classList.add(state);
+}
 
-    if (state === "listening") {
-        orb.classList.add("listening");
-    } else if (state === "speaking") {
-        orb.classList.add("speaking");
-    } else {
-        orb.classList.add("idle");
+/* ---------- TEXT TO SPEECH (browser) ---------- */
+function speak(text) {
+    return new Promise((resolve) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        utterance.onstart = () => setState("speaking");
+        utterance.onend = () => {
+            setState("idle");
+            resolve();
+        };
+
+        speechSynthesis.speak(utterance);
+    });
+}
+
+/* ---------- SPEECH RECOGNITION ---------- */
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+recognition.lang = "en-US";
+recognition.interimResults = false;
+recognition.continuous = false;
+
+recognition.onstart = () => setState("listening");
+
+recognition.onresult = (event) => {
+    const text = event.results[0][0].transcript;
+    console.log("You:", text);
+    sendResponse(text);
+};
+
+recognition.onerror = (err) => {
+    console.error("Mic error:", err);
+    setState("idle");
+};
+
+function startMic() {
+    recognition.start();
+}
+
+/* ---------- API CALLS ---------- */
+
+async function startInterview() {
+    try {
+        const res = await fetch("http://127.0.0.1:8000/start");
+        const data = await res.json();
+
+        await speak(data.reply);
+
+    } catch (err) {
+        console.error(err);
+        alert("Backend not reachable");
+    }
+}
+
+async function sendResponse(text) {
+    try {
+        setState("listening");
+
+        const res = await fetch("http://127.0.0.1:8000/respond", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ text })
+        });
+
+        const data = await res.json();
+
+        await speak(data.reply);
+
+    } catch (err) {
+        console.error(err);
+        setState("idle");
+    }
+}
+
+async function finishInterview() {
+    try {
+        const res = await fetch("http://127.0.0.1:8000/evaluate");
+        const data = await res.json();
+
+        await speak(data.reply);
+
+    } catch (err) {
+        console.error(err);
     }
 }
 </script>
