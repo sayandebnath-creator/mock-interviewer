@@ -50,3 +50,35 @@ pyttsx3
 
 # State driven Ui
 idle → listening → speaking
+
+# UI FLOW
+Click "Start"
+ → /start
+ → AI speaks
+
+User clicks mic
+ → speaks
+ → /respond
+ → AI replies
+
+User says "done"
+ → /evaluate
+ → final result
+
+# Important engineering notes
+⚠️ State issue (important)
+
+Right now:
+current_question = ...
+
+This is global (bad for multi-users)
+
+But fine for:
+✔ your local project
+✔ MVP
+
+# What build for now:-
+✔ API-driven system
+✔ UI + backend separation
+✔ Voice interaction
+✔ Real interview loop
